@@ -137,9 +137,11 @@ Navigation component with:
 - Mobile-responsive menu
 
 ### Event Detail Page (`[event_id]/+page.svelte`)
+
 The event detail page provides a comprehensive view of an individual event with:
 
 #### Features
+
 - Real-time updates for event data
 - Dynamic availability status
 - Interactive registration process
@@ -149,18 +151,22 @@ The event detail page provides a comprehensive view of an individual event with:
 - Loading states and animations
 
 #### Sections
+
 1. **Hero Section**
+
    - Event title and status badges
    - Department/category tags
    - Host organization information
 
 2. **Key Details Cards**
+
    - Date and time information
    - Location details
    - Availability status
    - Visual progress indicator
 
 3. **Features Grid**
+
    - Certificate availability
    - Food provision status
    - OD (On Duty) status
@@ -173,19 +179,20 @@ The event detail page provides a comprehensive view of an individual event with:
    - Last update timestamp
 
 #### Real-time Updates
+
 The page implements Supabase real-time subscriptions:
+
 ```typescript
 const channel = supabase.channel('events-realtime');
-channel.on(
-  'postgres_changes',
-  { event: '*', schema: 'public', table: 'events' },
-  (payload) => {
-    // Handle event updates
-  }
-).subscribe();
+channel
+	.on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, (payload) => {
+		// Handle event updates
+	})
+	.subscribe();
 ```
 
 #### State Management
+
 - Local state using Svelte's `$state`
 - Derived state with `$derived`
 - Asynchronous data handling
@@ -193,6 +200,7 @@ channel.on(
 - Loading state indicators
 
 #### Authentication Integration
+
 - User state awareness
 - Conditional registration button
 - Protected registration flow
@@ -336,32 +344,34 @@ The project uses TypeScript for type safety. Key types include:
 ## Technical Implementation
 
 ### TypeScript Integration
+
 ```typescript
 // Event type definition
 type EventTable = {
-  id: string;
-  name: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-  time: string;
-  location: string;
-  price: number;
-  max_slots: number;
-  booked_slots: number;
-  food_provided: boolean;
-  od_provided: boolean;
-  is_sold_out: boolean;
-  color: string;
-  department?: string;
-  managed_by?: string;
-  certificate_provided?: boolean;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	name: string;
+	description: string;
+	start_date: string;
+	end_date: string;
+	time: string;
+	location: string;
+	price: number;
+	max_slots: number;
+	booked_slots: number;
+	food_provided: boolean;
+	od_provided: boolean;
+	is_sold_out: boolean;
+	color: string;
+	department?: string;
+	managed_by?: string;
+	certificate_provided?: boolean;
+	created_at: string;
+	updated_at: string;
 };
 ```
 
 ### State Management Implementation
+
 ```typescript
 // Reactive state declarations
 let eventData: EventTable | null = $state(null);
@@ -371,12 +381,13 @@ let isRetrying: boolean = $state(false);
 ```
 
 ### Component Architecture
+
 1. **Smart Components**
    - Event detail page
    - Registration form
    - Event list
-   
 2. **Presentational Components**
+
    - Feature badges
    - Loading spinners
    - Error messages
@@ -388,17 +399,17 @@ let isRetrying: boolean = $state(false);
    - Responsive containers
 
 ### UI/UX Features
+
 1. **Loading States**
    - Skeleton loaders
    - Spinner animations
    - Progress indicators
-   
 2. **Error Handling**
    - Error boundaries
    - Retry mechanisms
    - User feedback
-   
 3. **Animations**
+
    - Smooth transitions
    - Loading animations
    - Progress updates
@@ -410,32 +421,30 @@ let isRetrying: boolean = $state(false);
    - Focus management
 
 ### Data Flow Architecture
+
 1. **Server-side**
    - Initial data loading
    - Authentication checks
    - Route parameters
-   
 2. **Client-side**
    - State management
    - Real-time updates
    - User interactions
-   
 3. **Database**
    - Event records
    - User registrations
    - Real-time subscriptions
 
 ### Performance Considerations
+
 1. **Code Splitting**
    - Dynamic imports
    - Lazy loading
    - Component chunking
-   
 2. **State Management**
    - Efficient updates
    - Minimal rerenders
    - Cached data
-   
 3. **Network**
    - Real-time connections
    - Data caching
@@ -462,12 +471,14 @@ let isRetrying: boolean = $state(false);
 ## State Management
 
 ### User State
+
 - Centralized user state management
 - Real-time session tracking
 - Authentication status updates
 - User preference persistence
 
 ### Event State
+
 - Real-time event data synchronization
 - Optimistic UI updates
 - Cache management
@@ -475,6 +486,7 @@ let isRetrying: boolean = $state(false);
 - Loading state management
 
 ### Data Flow
+
 1. Initial server-side data load
 2. Client-side state hydration
 3. Real-time update subscription
@@ -484,18 +496,21 @@ let isRetrying: boolean = $state(false);
 ## Real-time Features
 
 ### Event Updates
+
 - Live booking count updates
 - Dynamic availability status
 - Automatic sold-out detection
 - Price and detail changes
 
 ### User Interactions
+
 - Registration status updates
 - Booking confirmation
 - Error notifications
 - Session management
 
 ### Performance Optimizations
+
 - Debounced updates
 - Optimistic UI changes
 - Smart rerendering

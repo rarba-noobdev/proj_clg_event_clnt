@@ -24,86 +24,92 @@
   - +layout.ts (artifact_id: e53cc036-e3e9-4d06-90a0-7281a52f97ef)
 -->
 <script lang="ts">
-  // Import necessary types and components
-  import type { PageProps } from './$types.js';
-  import EventCard from '$lib/components/EventCard.svelte';
-  import type { EventTable } from '$lib/userstate.svelte.js';
-  import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+	// Import necessary types and components
+	import type { PageProps } from './$types.js';
+	import EventCard from '$lib/components/EventCard.svelte';
+	import type { EventTable } from '$lib/userstate.svelte.js';
+	import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-  // Get props (data passed from +page.ts)
-  let { data }: PageProps = $props();
-  let { supabase, eventsPromise } = data;
+	// Get props (data passed from +page.ts)
+	let { data }: PageProps = $props();
+	let { supabase, eventsPromise } = data;
 
-  // State variables to manage the page
-  let events: EventTable[] = $state([]); // List of events
-  let error: string | null = $state(null); // Error message if something goes wrong
-  let loading: boolean = $state(true); // Whether the page is loading
+	// State variables to manage the page
+	let events: EventTable[] = $state([]); // List of events
+	let error: string | null = $state(null); // Error message if something goes wrong
+	let loading: boolean = $state(true); // Whether the page is loading
 
-  // Load events and set up real-time updates
-  $effect(() => {
-    // Load initial events
-    eventsPromise
-      .then((loadedEvents) => {
-        events = loadedEvents ?? []; // Set events or empty array if null
-        loading = false; // Done loading
-      })
-      .catch((err: unknown) => {
-        error = err instanceof Error ? err.message : 'Failed to load events';
-        loading = false;
-      });
+	// Load events and set up real-time updates
+	$effect(() => {
+		// Load initial events
+		eventsPromise
+			.then((loadedEvents) => {
+				events = loadedEvents ?? []; // Set events or empty array if null
+				loading = false; // Done loading
+			})
+			.catch((err: unknown) => {
+				error = err instanceof Error ? err.message : 'Failed to load events';
+				loading = false;
+			});
 
-    // Set up real-time updates with Supabase
-    const channel = supabase.channel('events-realtime');
-    channel
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'events' },
-        (payload: RealtimePostgresChangesPayload<EventTable>) => {
-          // Handle new event added
-          if (payload.eventType === 'INSERT') {
-            events = [...events, payload.new];
-          }
-          // Handle event updated
-          else if (payload.eventType === 'UPDATE') {
-            events = events.map((event) => (event.id === payload.new.id ? payload.new : event));
-          }
-          // Handle event deleted
-          else if (payload.eventType === 'DELETE') {
-            events = events.filter((event) => event.id !== payload.old.id);
-          }
-          error = null; // Clear any previous errors
-        }
-      )
-      .subscribe();
+		// Set up real-time updates with Supabase
+		const channel = supabase.channel('events-realtime');
+		channel
+			.on(
+				'postgres_changes',
+				{ event: '*', schema: 'public', table: 'events' },
+				(payload: RealtimePostgresChangesPayload<EventTable>) => {
+					// Handle new event added
+					if (payload.eventType === 'INSERT') {
+						events = [...events, payload.new];
+					}
+					// Handle event updated
+					else if (payload.eventType === 'UPDATE') {
+						events = events.map((event) => (event.id === payload.new.id ? payload.new : event));
+					}
+					// Handle event deleted
+					else if (payload.eventType === 'DELETE') {
+						events = events.filter((event) => event.id !== payload.old.id);
+					}
+					error = null; // Clear any previous errors
+				}
+			)
+			.subscribe();
 
-    // Clean up the subscription when the component is destroyed
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  });
+		// Clean up the subscription when the component is destroyed
+		return () => {
+			supabase.removeChannel(channel);
+		};
+	});
 
-  // Retry loading events if something goes wrong
-  async function handleRetry() {
-    error = null;
-    loading = true;
-    try {
-      events = (await eventsPromise) ?? [];
-      loading = false;
-    } catch (err: unknown) {
-      error = err instanceof Error ? err.message : 'Failed to load events';
-      loading = false;
-    }
-  }
+	// Retry loading events if something goes wrong
+	async function handleRetry() {
+		error = null;
+		loading = true;
+		try {
+			events = (await eventsPromise) ?? [];
+			loading = false;
+		} catch (err: unknown) {
+			error = err instanceof Error ? err.message : 'Failed to load events';
+			loading = false;
+		}
+	}
+
+	// let filterEvents = () => {
+	// 	events = [events[0]]
+	// }
 </script>
 
-
+<!-- <button onclick={filterEvents}>
+Click
+</button> -->
 <section class="flex-grow bg-gradient-to-br from-gray-900 to-gray-950 p-4 font-sans sm:p-8">
 	<div class="mx-auto max-w-7xl">
 		<!-- Header Section -->
 		<div class="mb-12">
 			<div class="mb-4 inline-flex items-center gap-3">
 				<div class="h-px w-10 bg-indigo-400"></div>
-				<span class="text-sm font-medium tracking-wider text-indigo-400">YOUR EVENTS</span>
+				<span class="text-sm font-medium tracking-wider text-indigo-400">All Events</span>
 			</div>
 		</div>
 

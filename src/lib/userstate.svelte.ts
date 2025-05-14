@@ -76,13 +76,9 @@ export class UserState {
 		return this._supabase;
 	}
 
-
-
 	async logOut() {
 		await this._supabase?.auth.signOut();
-		
 	}
-
 }
 
 const UUIK = Symbol('userStateKey');

@@ -3,7 +3,7 @@
 	import { getUserState, type EventTable } from '$lib/userstate.svelte.js';
 	import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-	let {user} = $derived(getUserState());
+	let { user } = $derived(getUserState());
 	let { data }: PageProps = $props();
 	let { supabase } = $derived(data);
 
@@ -11,7 +11,7 @@
 	let eventData: EventTable | null = $state(null);
 	let error: string | null = $state(null);
 	let loading: boolean = $state(true);
- 
+
 	$effect(() => {
 		data.event
 			.then((resolvedEvent) => {
@@ -44,7 +44,13 @@
 	});
 
 	function formatDate(date: string | null | undefined): string {
-		return date || 'TBD';
+		if (!date) return 'TBD';
+		const options: Intl.DateTimeFormatOptions = {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
+		};
+		return new Date(date).toLocaleDateString('en-US', options);
 	}
 
 	function handleRegister() {
@@ -67,21 +73,28 @@
 <div class="min-h-screen bg-gray-900 text-gray-100">
 	{#if loading}
 		<div class="flex min-h-screen items-center justify-center">
-			<div class="h-8 w-8 animate-spin rounded-full border-2 border-gray-600 border-t-indigo-500"></div>
+			<div
+				class="h-8 w-8 animate-spin rounded-full border-2 border-gray-600 border-t-indigo-500"
+			></div>
 		</div>
-
 	{:else if eventData}
 		<!-- Hero Section -->
 		<div class="border-b border-gray-800 py-12">
 			<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 				<div class="mb-4 flex gap-2">
 					{#if eventData.is_sold_out}
-						<span class="rounded bg-red-900/50 px-2 py-1 text-xs font-medium text-red-300">Sold Out</span>
+						<span class="rounded bg-red-900/50 px-2 py-1 text-xs font-medium text-red-300"
+							>Sold Out</span
+						>
 					{:else if eventData.booked_slots >= eventData.max_slots * 0.8}
-						<span class="rounded bg-amber-900/50 px-2 py-1 text-xs font-medium text-amber-300">Almost Full</span>
+						<span class="rounded bg-amber-900/50 px-2 py-1 text-xs font-medium text-amber-300"
+							>Almost Full</span
+						>
 					{/if}
 					{#if eventData.department}
-						<span class="rounded bg-gray-800 px-2 py-1 text-xs font-medium text-gray-300">{eventData.department}</span>
+						<span class="rounded bg-gray-800 px-2 py-1 text-xs font-medium text-gray-300"
+							>{eventData.department}</span
+						>
 					{/if}
 				</div>
 
@@ -98,16 +111,19 @@
 							<div>
 								<p class="text-sm text-gray-500">Date</p>
 								<p class="font-medium">
-									{formatDate(eventData.start_date)}
-									{eventData.end_date ? ` - ${formatDate(eventData.end_date)}` : ''}
+									{#if eventData.start_date === eventData.end_date}
+										{formatDate(eventData.start_date)}
+									{:else}
+										{formatDate(eventData.start_date)} to {formatDate(eventData.end_date)}
+									{/if}
 								</p>
 							</div>
-							
+
 							<div>
 								<p class="text-sm text-gray-500">Time</p>
 								<p class="font-medium">{eventData.time || 'TBD'}</p>
 							</div>
-							
+
 							<div>
 								<p class="text-sm text-gray-500">Location</p>
 								<p class="font-medium">{eventData.location || 'TBD'}</p>
@@ -255,13 +271,13 @@
 				<div class="md:col-span-1">
 					<div class="rounded-lg border border-gray-800 bg-gray-800/50 p-6">
 						<h3 class="mb-4 text-lg font-bold">Register</h3>
-						
+
 						<div class="mb-6 space-y-4">
 							<div class="flex justify-between">
 								<span class="text-gray-400">Price</span>
 								<span class="font-medium">₹{eventData.price ?? 0}</span>
 							</div>
-							
+
 							<div class="flex justify-between">
 								<span class="text-gray-400">Availability</span>
 								<span class="font-medium">
@@ -283,7 +299,10 @@
 						</button>
 
 						<div class="mt-4 text-center text-sm text-gray-500">
-							<button onclick={handleContact} class="text-indigo-400 hover:text-indigo-300 hover:underline">
+							<button
+								onclick={handleContact}
+								class="text-indigo-400 hover:text-indigo-300 hover:underline"
+							>
 								Contact organizer
 							</button>
 						</div>
@@ -329,7 +348,11 @@
 	}
 
 	@keyframes spin {
-		from { transform: rotate(0deg); }
-		to { transform: rotate(360deg); }
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>

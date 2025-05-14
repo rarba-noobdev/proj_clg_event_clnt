@@ -8,7 +8,8 @@ export const load: LayoutLoad = async ({ parent }) => {
 	const eventsPromise: Promise<EventTable[]> = Promise.resolve(
 		supabase
 			.from('events')
-			.select('*').order('name', { ascending: true })
+			.select('*')
+			.order('name', { ascending: true })
 			.then(({ data, error }) => {
 				if (error) {
 					console.error('Error fetching events:', error);
