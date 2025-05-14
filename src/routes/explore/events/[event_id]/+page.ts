@@ -48,7 +48,7 @@ export const load: PageLoad = async ({ params, parent }) => {
 				console.warn(`No event found for ID: ${params.event_id}`);
 				return null;
 			}
-			console.log('Resolved event:', foundEvent);
+			// console.log('Resolved event:', foundEvent);
 			return foundEvent;
 		})
 		.catch((err: unknown) => {

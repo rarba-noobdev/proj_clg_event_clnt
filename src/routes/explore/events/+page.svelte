@@ -23,108 +23,79 @@
   - Supabase client (@supabase/supabase-js)
   - +layout.ts (artifact_id: e53cc036-e3e9-4d06-90a0-7281a52f97ef)
 -->
-
 <script lang="ts">
-	import type { PageProps } from './$types.js';
-	import EventCard from '$lib/components/EventCard.svelte';
-	import type { EventTable } from '$lib/userstate.svelte.js';
-	import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+  // Import necessary types and components
+  import type { PageProps } from './$types.js';
+  import EventCard from '$lib/components/EventCard.svelte';
+  import type { EventTable } from '$lib/userstate.svelte.js';
+  import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-	// Props
-	let { data }: PageProps = $props();
-	let { supabase, eventsPromise } = data;
+  // Get props (data passed from +page.ts)
+  let { data }: PageProps = $props();
+  let { supabase, eventsPromise } = data;
 
-	// State
-	let events: EventTable[] = $state([]);
-	let error: string | null = $state(null);
-	let loading: boolean = $state(true);
-	let reconnectAttempts = $state(0);
-	const MAX_RECONNECT_ATTEMPTS = 3;
-	const LOADING_TIMEOUT = 10000; // 10 seconds
+  // State variables to manage the page
+  let events: EventTable[] = $state([]); // List of events
+  let error: string | null = $state(null); // Error message if something goes wrong
+  let loading: boolean = $state(true); // Whether the page is loading
 
-	// Load initial events
-	const loadEvents = async () => {
-		const timeout = setTimeout(() => {
-			if (loading) {
-				error = 'Loading timed out';
-				loading = false;
-			}
-		}, LOADING_TIMEOUT);
+  // Load events and set up real-time updates
+  $effect(() => {
+    // Load initial events
+    eventsPromise
+      .then((loadedEvents) => {
+        events = loadedEvents ?? []; // Set events or empty array if null
+        loading = false; // Done loading
+      })
+      .catch((err: unknown) => {
+        error = err instanceof Error ? err.message : 'Failed to load events';
+        loading = false;
+      });
 
-		try {
-			events = (await eventsPromise) ?? [];
-			loading = false;
-		} catch (err: unknown) {
-			console.error('Error loading events:', err);
-			error = err instanceof Error ? err.message : 'Failed to load events';
-			loading = false;
-		} finally {
-			clearTimeout(timeout);
-		}
-	};
+    // Set up real-time updates with Supabase
+    const channel = supabase.channel('events-realtime');
+    channel
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'events' },
+        (payload: RealtimePostgresChangesPayload<EventTable>) => {
+          // Handle new event added
+          if (payload.eventType === 'INSERT') {
+            events = [...events, payload.new];
+          }
+          // Handle event updated
+          else if (payload.eventType === 'UPDATE') {
+            events = events.map((event) => (event.id === payload.new.id ? payload.new : event));
+          }
+          // Handle event deleted
+          else if (payload.eventType === 'DELETE') {
+            events = events.filter((event) => event.id !== payload.old.id);
+          }
+          error = null; // Clear any previous errors
+        }
+      )
+      .subscribe();
 
-	// Handle real-time updates
-	const setupRealtime = () => {
-		const channel = supabase.channel('events-realtime');
+    // Clean up the subscription when the component is destroyed
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  });
 
-		channel.on(
-			'postgres_changes',
-			{ event: '*', schema: 'public', table: 'events' },
-			(payload: RealtimePostgresChangesPayload<EventTable>) => {
-				try {
-					if (payload.eventType === 'INSERT') {
-						events = [...events, payload.new];
-					} else if (payload.eventType === 'UPDATE') {
-						events = events.map((event) => (event.id === payload.new.id ? payload.new : event));
-					} else if (payload.eventType === 'DELETE') {
-						events = events.filter((event) => event.id !== payload.old.id);
-					}
-					reconnectAttempts = 0;
-					if (error === 'Real-time updates disconnected') error = null;
-				} catch (err) {
-					console.error('Error processing update:', err);
-					error = 'Error processing real-time update';
-				}
-			}
-		);
-
-		channel.subscribe((status) => {
-			if (status === 'SUBSCRIBED') {
-				console.log('Real-time subscription active');
-				reconnectAttempts = 0;
-				if (error === 'Real-time updates disconnected') error = null;
-			} else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
-				if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-					reconnectAttempts++;
-					console.log(`Reconnecting... Attempt ${reconnectAttempts}`);
-					setTimeout(() => channel.subscribe(), 1000 * reconnectAttempts);
-				} else {
-					console.error('Max reconnection attempts reached:', status);
-					error = 'Real-time updates disconnected';
-				}
-			}
-		});
-
-		return () => {
-			supabase.removeChannel(channel).then(() => {
-				console.log('Real-time subscription removed');
-			});
-		};
-	};
-
-	// Single effect to initialize
-	$effect(() => {
-		loadEvents();
-		return setupRealtime();
-	});
-
-	// Retry handler
-	async function handleRetry() {
-		error = null;
-		loading = true;
-		await loadEvents();
-	}
+  // Retry loading events if something goes wrong
+  async function handleRetry() {
+    error = null;
+    loading = true;
+    try {
+      events = (await eventsPromise) ?? [];
+      loading = false;
+    } catch (err: unknown) {
+      error = err instanceof Error ? err.message : 'Failed to load events';
+      loading = false;
+    }
+  }
 </script>
+
 
 <section class="flex-grow bg-gradient-to-br from-gray-900 to-gray-950 p-4 font-sans sm:p-8">
 	<div class="mx-auto max-w-7xl">

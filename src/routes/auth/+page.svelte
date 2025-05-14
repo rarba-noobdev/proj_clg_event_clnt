@@ -1,3 +1,14 @@
+
+<svelte:head>
+  <title>Login - Cresbee</title>
+  <meta name="description" content="Log in to Your App Name to access your events and dashboard." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta property="og:title" content="Login - Your App Name" />
+  <meta property="og:description" content="Log in to Your App Name to access your events and dashboard." />
+  <meta property="og:type" content="website" />
+</svelte:head>
+
+
 <div
 	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-gray-950 to-black px-4 py-12 text-gray-100"
 >

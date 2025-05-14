@@ -14,7 +14,6 @@
  * @module userstate
  */
 
-import { goto } from '$app/navigation';
 import type { Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { getContext, setContext } from 'svelte';
 import type { Database } from '$lib/types/database.types.js';
@@ -77,10 +76,13 @@ export class UserState {
 		return this._supabase;
 	}
 
+
+
 	async logOut() {
 		await this._supabase?.auth.signOut();
-		goto('/auth');
+		
 	}
+
 }
 
 const UUIK = Symbol('userStateKey');
