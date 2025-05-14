@@ -63,24 +63,9 @@ export class UserState {
 		this._session = userState.session;
 		this._user = userState.user;
 		this._supabase = userState.supabase;
-		// this.fetchEvents();
-	}
+ 	}
 
-	// async fetchEvents() {
-	// 	if (!this._supabase) {
-	// 		throw new Error('Supabase client is not initialized.');
-	// 	}
-
-	// 	const { data, error } = await this._supabase.from('events').select('*');
-
-	// 	if (error) {
-	// 		console.error('Error fetching events:', error);
-	// 		return;
-	// 	}
-
-	// 	this._events = data || [];
-	// 	return this._events;
-	// }
+ 
 
 	get session(): Session | null {
 		return this._session;
