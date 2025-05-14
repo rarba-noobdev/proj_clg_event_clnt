@@ -1,7 +1,10 @@
 <svelte:head>
 	<title>Crescent - Campus Life Reimagined</title>
-	<meta name="description" content="Explore events and organizations at B.S. Abdur Rahman Crescent Institute of Science & Technology." />
- </svelte:head>
+	<meta
+		name="description"
+		content="Explore events and organizations at B.S. Abdur Rahman Crescent Institute of Science & Technology."
+	/>
+</svelte:head>
 
 <section
 	class="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black py-24"

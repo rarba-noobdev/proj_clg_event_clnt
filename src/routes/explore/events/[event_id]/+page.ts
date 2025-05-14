@@ -23,39 +23,38 @@
 //   - Provides detailed debug logging
 //   - Returns null for invalid or missing events to simplify downstream handling
 
-
 import type { PageLoad } from './$types.js';
 import type { EventTable } from '$lib/userstate.svelte.js';
 
 export const load: PageLoad = async ({ params, parent }) => {
-  // Validate event_id
-  if (!params.event_id) {
-    console.error('Missing or invalid event_id parameter');
-    return { event: Promise.resolve(null) };
-  }
+	// Validate event_id
+	if (!params.event_id) {
+		console.error('Missing or invalid event_id parameter');
+		return { event: Promise.resolve(null) };
+	}
 
-  // Fetch parent data
-  const { eventsPromise } = await parent();
+	// Fetch parent data
+	const { eventsPromise } = await parent();
 
-  // Resolve events and find the matching event
-  const event: Promise<EventTable | null> = eventsPromise
-    .then((events) => {
-      if (!events || events.length === 0) {
-        console.warn('No events available in eventsPromise');
-        return null;
-      }
-      const foundEvent = events.find((event) => event.id === params.event_id);
-      if (!foundEvent) {
-        console.warn(`No event found for ID: ${params.event_id}`);
-        return null;
-      }
-      console.log('Resolved event:', foundEvent);
-      return foundEvent;
-    })
-    .catch((err: unknown) => {
-      console.error('Error resolving eventsPromise:', err);
-      return null;
-    });
+	// Resolve events and find the matching event
+	const event: Promise<EventTable | null> = eventsPromise
+		.then((events) => {
+			if (!events || events.length === 0) {
+				console.warn('No events available in eventsPromise');
+				return null;
+			}
+			const foundEvent = events.find((event) => event.id === params.event_id);
+			if (!foundEvent) {
+				console.warn(`No event found for ID: ${params.event_id}`);
+				return null;
+			}
+			console.log('Resolved event:', foundEvent);
+			return foundEvent;
+		})
+		.catch((err: unknown) => {
+			console.error('Error resolving eventsPromise:', err);
+			return null;
+		});
 
-  return { event };
+	return { event };
 };

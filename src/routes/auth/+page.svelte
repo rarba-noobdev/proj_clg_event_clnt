@@ -1,4 +1,3 @@
-
 <div
 	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-gray-950 to-black px-4 py-12 text-gray-100"
 >

@@ -4,13 +4,13 @@
  * Global state management for user authentication and session handling.
  * Provides a centralized way to manage user state across the application
  * using Svelte's context API and Supabase authentication.
- * 
+ *
  * Features:
  * - Reactive state management for user session
  * - Supabase client integration
  * - Authentication state persistence
  * - Type-safe database interactions
- * 
+ *
  * @module userstate
  */
 
@@ -63,9 +63,7 @@ export class UserState {
 		this._session = userState.session;
 		this._user = userState.user;
 		this._supabase = userState.supabase;
- 	}
-
- 
+	}
 
 	get session(): Session | null {
 		return this._session;

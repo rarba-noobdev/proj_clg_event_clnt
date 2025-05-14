@@ -28,7 +28,7 @@
 		</a>
 	</h1>
 
-	<div class="flex items-center gap-3 md:gap-6"> 
+	<div class="flex items-center gap-3 md:gap-6">
 		<nav class="hidden items-center gap-3 md:flex md:gap-4">
 			{#if user}
 				<a
@@ -136,7 +136,7 @@
 					</svg>
 					<span class="max-w-[120px] truncate text-sm font-medium text-blue-200">{user.email}</span>
 				</div>
-				<button 
+				<button
 					onclick={logOut}
 					class="flex items-center rounded-full border border-blue-500/30 bg-blue-700/20 px-3 py-1.5 text-sm font-medium text-blue-200 shadow-md transition-all duration-200 hover:bg-blue-600/40 hover:text-blue-100 hover:shadow-blue-500/20 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none"
 				>
