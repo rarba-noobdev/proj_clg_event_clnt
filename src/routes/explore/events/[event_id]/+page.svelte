@@ -62,6 +62,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>{eventData?.name} - Your App Name</title>
+  <meta name="description" content={eventData?.description ? eventData.description.slice(0, 160) : 'View Details.'} />
+</svelte:head>
 <div class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-gray-100">
   {#if loading}
     <div class="flex flex-col items-center justify-center min-h-screen" role="status" aria-label="Loading event">

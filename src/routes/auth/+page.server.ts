@@ -1,5 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions } from './$types.js';
+import { goto } from '$app/navigation';
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
@@ -34,14 +35,13 @@ export const actions: Actions = {
     if (error) {
       console.error('Login error:', error.message);
       // Map Supabase errors to user-friendly messages
-      const errorMessage =
-        error.message.includes('Invalid login credentials')
-          ? 'Invalid registration number or password'
-          : 'An error occurred during login';
-      return fail(401, { error: errorMessage });
-    }
+      console.log();
+      
+redirect(error.status || 520, `/auth/error/${error.message}`);
+
+}
 
     // Success: redirect to dashboard
-    redirect(303, '/private/dashboard');
+    redirect(303, '/');
   }
 };

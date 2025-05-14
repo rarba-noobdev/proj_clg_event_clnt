@@ -39,15 +39,29 @@ src/
 │   │   ├── Header.svelte      # Navigation header
 │   │   └── Icon.svelte        # Icon component
 │   ├── types/           # TypeScript type definitions
+│   │   └── database.types.ts  # Supabase database types
 │   └── userstate.svelte.ts    # User state management
-└── routes/              # Application routes
-    ├── auth/            # Authentication routes
-    │   ├── +page.server.ts    # Auth server logic
-    │   └── +page.svelte       # Login form
-    └── explore/         # Event exploration
-        └── events/      # Event listing and details
-            ├── +layout.ts      # Event data loading
-            └── [event_id]/     # Dynamic event routes
+├── routes/              # Application routes
+│   ├── +layout.server.ts      # Root server layout
+│   ├── +layout.svelte         # Root layout component
+│   ├── +layout.ts            # Root client layout
+│   ├── +page.svelte          # Home page
+│   ├── auth/                 # Authentication routes
+│   │   ├── +page.server.ts   # Auth server logic
+│   │   ├── +page.svelte      # Login form
+│   │   └── error/            # Auth error handling
+│   │       ├── +page.svelte  # Error display
+│   │       ├── +page.ts      # Error page logic
+│   │       └── [error_msg]/  # Dynamic error routes
+│   └── explore/             # Content exploration
+│       ├── events/          # Event management
+│       │   ├── +layout.ts   # Event data loading
+│       │   ├── +page.svelte # Events listing
+│       │   └── [event_id]/  # Individual event routes
+│       └── organizations/   # Organization management
+│           └── +page.svelte # Organizations listing
+└── supabase/           # Supabase configuration
+    └── config.toml     # Supabase settings
 ```
 
 ## Architecture
@@ -58,10 +72,37 @@ src/
 3. Protected routes check for valid session using hooks
 4. Real-time session updates using Supabase's onAuthStateChange
 
+### Error Handling
+- Centralized error handling through dedicated error routes
+- Custom error pages for different error types
+- Dynamic error message routing
+- Graceful fallbacks for failed operations
+- Comprehensive error logging and reporting
+
+### Organization Management
+- View and manage organization details
+- Organization-specific event management
+- Role-based access control for organization members
+- Organization analytics and reporting
+
+### Routing Structure
+- Root layout provides base page structure and authentication state
+- Nested layouts for feature-specific content
+- Dynamic routes for events and error messages
+- Protected routes with authentication checks
+- Client-side navigation with prefetching
+
 ### State Management
 - Uses Svelte's built-in stores for local state
 - Supabase real-time subscriptions for remote state
 - Server-side rendering with hydration for optimal performance
+
+### Data Flow
+1. Server-side data loading through layout/page load functions
+2. Client-side state management using Svelte stores
+3. Real-time updates through Supabase subscriptions
+4. Optimistic UI updates with fallback handling
+5. Form handling with server actions
 
 ## Components
 
@@ -85,6 +126,28 @@ Navigation component with:
 - User profile management
 - Mobile-responsive menu
 
+## Component Organization
+
+### Core Components
+Components in `src/lib/components` are organized by functionality:
+
+#### UI Components
+- `Icon.svelte`: Reusable icon component with dynamic SVG loading
+- `Header.svelte`: Main navigation header with responsive design
+- `EventCard.svelte`: Card component for event display
+
+#### Layout Components
+- Root layout (`+layout.svelte`): Base page structure
+- Error layouts: Custom error page templates
+- Feature-specific layouts: Event and organization layouts
+
+### Component Design Principles
+1. Single Responsibility: Each component has a focused purpose
+2. Prop Validation: TypeScript interfaces for component props
+3. Event Handling: Standardized event dispatching
+4. Accessibility: ARIA attributes and keyboard navigation
+5. Responsive Design: Mobile-first approach
+
 ## Development
 
 1. Install dependencies:
@@ -98,6 +161,29 @@ Create a `.env` file with:
 PUBLIC_SUPABASE_URL=your_supabase_url
 PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+
+### Environment Setup
+
+#### Development
+```bash
+# .env.development
+PUBLIC_SUPABASE_URL=your_dev_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=your_dev_anon_key
+PUBLIC_APP_URL=http://localhost:5173
+```
+
+#### Production
+```bash
+# .env.production
+PUBLIC_SUPABASE_URL=your_prod_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=your_prod_supabase_anon_key
+PUBLIC_APP_URL=https://your-domain.com
+```
+
+### Environment Variables
+- `PUBLIC_SUPABASE_URL`: Supabase project URL
+- `PUBLIC_SUPABASE_ANON_KEY`: Supabase anonymous key
+- `PUBLIC_APP_URL`: Application URL for redirects
 
 3. Start development server:
 ```bash
@@ -143,6 +229,23 @@ The project uses TypeScript for type safety. Key types include:
 - `color`: Theme color for UI (String)
 - `created_at`: Creation timestamp
 - `updated_at`: Last update timestamp
+
+### Organizations Table
+- `id`: Unique identifier (UUID)
+- `name`: Organization name (String)
+- `description`: Organization description (Text)
+- `logo_url`: Organization logo URL (String)
+- `website`: Organization website (String)
+- `email`: Contact email (String)
+- `created_at`: Creation timestamp
+- `updated_at`: Last update timestamp
+
+### User Roles Table
+- `id`: Unique identifier (UUID)
+- `user_id`: Reference to auth.users
+- `organization_id`: Reference to organizations
+- `role`: Role type (enum: 'admin', 'member', 'guest')
+- `created_at`: Creation timestamp
 
 ## Performance Considerations
 
