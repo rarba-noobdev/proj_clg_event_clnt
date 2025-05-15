@@ -3,42 +3,41 @@
  * ------------------
  * Manages the layout and data loading for the events section.
  * Handles real-time updates and data synchronization.
- * 
+ *
  * Features:
  * - Event data loading
  * - Real-time updates
  * - Error handling
  * - Cache management
- * 
+ *
  * Data Loading:
  * - Fetches events from Supabase
  * - Handles pagination
  * - Manages filters
  * - Sorts results
- * 
+ *
  * Real-time Updates:
  * - Event changes
  * - Booking updates
  * - Availability status
  * - Price changes
- * 
+ *
  * Error Handling:
  * - Network errors
  * - Data loading errors
  * - Subscription errors
- * 
+ *
  * Cache Strategy:
  * - Client-side caching
  * - Optimistic updates
  * - Cache invalidation
  * - Data persistence
- * 
+ *
  * @module explore/events/layout
  */
 
 import type { LayoutLoad } from './$types.js';
 import type { EventTable } from '$lib/userstate.svelte.js';
-import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 export const load: LayoutLoad = async ({ parent }) => {
 	const { supabase } = await parent();
@@ -54,8 +53,8 @@ export const load: LayoutLoad = async ({ parent }) => {
 					throw error;
 				}
 				return data as EventTable[];
-			}));
-
+			})
+	);
 
 	return {
 		eventsPromise

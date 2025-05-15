@@ -63,6 +63,8 @@
 	"dependencies": {
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.49.4",
-		"supabase": "^2.22.12"
+		"supabase": "^2.22.12",
+		"svelte-5-french-toast": "^2.0.4",
+		"zod": "^3.24.4"
 	}
 }

@@ -3,28 +3,28 @@
  * --------------------------
  * Provides centralized state management for user authentication and session handling
  * using Svelte's context API and Supabase authentication.
- * 
+ *
  * Features:
  * - Reactive state management for user session
  * - Supabase client integration
  * - Authentication state persistence
  * - Type-safe database interactions
  * - Real-time state updates
- * 
+ *
  * Usage:
  * ```typescript
  * // In a component
  * import { getUserState } from '$lib/userstate.svelte';
- * 
+ *
  * let { user, session } = $derived(getUserState());
  * ```
- * 
+ *
  * State Structure:
  * - session: Current user session
  * - user: Current user data
  * - supabase: Supabase client instance
  * - events: Cached events data
- * 
+ *
  * @module userstate
  */
 
@@ -33,7 +33,7 @@ import { getContext, setContext } from 'svelte';
 import type { Database } from '$lib/types/database.types.js';
 export type EventTable = Database['public']['Tables']['events']['Row'];
 
- /**
+/**
  * Interface representing the user state data structure
  * @interface userStateObject
  */

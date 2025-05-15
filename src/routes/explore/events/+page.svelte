@@ -32,7 +32,7 @@
 
 	// Get props (data passed from +layout.ts)
 	let { data }: PageProps = $props();
-	let { supabase, eventsPromise  } = $derived(data);
+	let { supabase, eventsPromise } = $derived(data);
 
 	// State variables to manage the page
 	let events: EventTable[] = $state([]); // List of events
@@ -78,7 +78,7 @@
 
 		// Clean up the subscription when the component is destroyed
 		return () => {
-			console.log("Clean UP fn");
+			console.log('Clean UP fn');
 			supabase.removeChannel(channe);
 		};
 	});

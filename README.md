@@ -519,10 +519,13 @@ let isRetrying: boolean = $state(false);
 ## Authentication System
 
 ### Architecture Overview
+
 The authentication system is built on top of Supabase Auth with a custom implementation for the university's registration number (RRN) system.
 
 #### Authentication Flow
+
 1. **Registration**
+
    - User enters RRN (Registration Number)
    - Selects course from predefined list
    - Creates password
@@ -530,6 +533,7 @@ The authentication system is built on top of Supabase Auth with a custom impleme
    - Account created in Supabase Auth
 
 2. **Login**
+
    - User enters RRN
    - Enters password
    - System maps RRN to email format
@@ -544,16 +548,18 @@ The authentication system is built on top of Supabase Auth with a custom impleme
 ### Components
 
 #### Registration Page (`/auth/register/+page.svelte`)
+
 ```typescript
 interface RegistrationForm {
-  rrn: string;
-  course: string;
-  password: string;
-  confirmPassword: string;
+	rrn: string;
+	course: string;
+	password: string;
+	confirmPassword: string;
 }
 ```
 
 Features:
+
 - RRN validation
 - Course selection dropdown
 - Password strength requirements
@@ -562,6 +568,7 @@ Features:
 - Responsive design
 
 #### Login Page (`/auth/+page.svelte`)
+
 - RRN input
 - Password input
 - Error messaging
@@ -571,19 +578,21 @@ Features:
 ### State Management
 
 #### UserState Class
+
 ```typescript
 class UserState {
-  private _session: Session | null;
-  private _user: User | null;
-  private _supabase: SupabaseClient | null;
+	private _session: Session | null;
+	private _user: User | null;
+	private _supabase: SupabaseClient | null;
 
-  constructor(userState: userStateObject);
-  updateState(userState: userStateObject): void;
-  logOut(): Promise<void>;
+	constructor(userState: userStateObject);
+	updateState(userState: userStateObject): void;
+	logOut(): Promise<void>;
 }
 ```
 
 Features:
+
 - Centralized state management
 - Type-safe implementations
 - Real-time state updates
@@ -593,12 +602,14 @@ Features:
 ### Security Features
 
 1. **Input Validation**
+
    - RRN format validation
    - Password strength requirements
    - Course validation
    - CSRF protection
 
 2. **Session Security**
+
    - Secure session storage
    - Automatic token refresh
    - Session invalidation
@@ -613,12 +624,14 @@ Features:
 ### Error Handling
 
 1. **Authentication Errors**
+
    - Invalid credentials
    - Network failures
    - Session expiration
    - Server errors
 
 2. **Form Validation**
+
    - Input validation
    - Password mismatch
    - Required fields
@@ -633,54 +646,60 @@ Features:
 ### Integration Points
 
 1. **Backend Integration**
+
 ```typescript
 // Supabase Auth Integration
 const { error } = await supabase.auth.signInWithPassword({
-  email: `${rrn}@crescent.education`,
-  password
+	email: `${rrn}@crescent.education`,
+	password
 });
 ```
 
 2. **Route Handling**
+
 ```typescript
 // Protected route handler
 export const load: PageLoad = async ({ parent }) => {
-  const { session } = await parent();
-  if (!session) {
-    throw redirect(303, '/auth/login');
-  }
-  return {};
+	const { session } = await parent();
+	if (!session) {
+		throw redirect(303, '/auth/login');
+	}
+	return {};
 };
 ```
 
 3. **State Updates**
+
 ```typescript
 // Real-time session updates
 $effect(() => {
-  const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
-    userState.updateState({
-      session: newSession,
-      user: newSession?.user || null
-    });
-  });
+	const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+		userState.updateState({
+			session: newSession,
+			user: newSession?.user || null
+		});
+	});
 });
 ```
 
 ### Testing Considerations
 
 1. **Unit Tests**
+
 - Authentication functions
 - State management
 - Form validation
 - Error handling
 
 2. **Integration Tests**
+
 - Login flow
 - Registration flow
 - Session management
 - Error scenarios
 
 3. **E2E Tests**
+
 - Complete user journeys
 - Cross-browser testing
 - Mobile responsiveness
@@ -711,80 +730,84 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ### User Authentication
 
 #### User Profile
+
 ```typescript
 interface UserProfile {
-  id: string;
-  rrn: string;              // Registration Number
-  course: string;           // Selected course
-  email: string;           // Constructed from RRN
-  created_at: string;
-  updated_at: string;
+	id: string;
+	rrn: string; // Registration Number
+	course: string; // Selected course
+	email: string; // Constructed from RRN
+	created_at: string;
+	updated_at: string;
 }
 ```
 
 #### Course Types
+
 ```typescript
 type CourseType =
-  | 'btech-civil'
-  | 'btech-mechanical'
-  | 'btech-automobile'
-  | 'btech-aeronautical'
-  | 'btech-polymer'
-  | 'btech-eee'
-  | 'btech-ece'
-  | 'btech-ecpe'
-  | 'btech-eie'
-  | 'btech-ai-ds'
-  | 'btech-cse'
-  | 'btech-cybersecurity'
-  | 'btech-iot'
-  | 'btech-it'
-  | 'btech-biotech'
-  | 'btech-lateral'
-  | 'barch'
-  | 'bdes'
-  | 'bpharm'
-  | 'bba-llb'
-  | 'ba-llb'
-  | 'bsc-aviation'
-  | 'bsc-biotech'
-  | 'bsc-cs'
-  | 'bca'
-  | 'bcom-general'
-  | 'bcom-af'
-  | 'bcom-pa'
-  | 'bcom-iaf'
-  | 'bba-general'
-  | 'ba-policy'
-  | 'ba-english'
-  | 'ba-islamic';
+	| 'btech-civil'
+	| 'btech-mechanical'
+	| 'btech-automobile'
+	| 'btech-aeronautical'
+	| 'btech-polymer'
+	| 'btech-eee'
+	| 'btech-ece'
+	| 'btech-ecpe'
+	| 'btech-eie'
+	| 'btech-ai-ds'
+	| 'btech-cse'
+	| 'btech-cybersecurity'
+	| 'btech-iot'
+	| 'btech-it'
+	| 'btech-biotech'
+	| 'btech-lateral'
+	| 'barch'
+	| 'bdes'
+	| 'bpharm'
+	| 'bba-llb'
+	| 'ba-llb'
+	| 'bsc-aviation'
+	| 'bsc-biotech'
+	| 'bsc-cs'
+	| 'bca'
+	| 'bcom-general'
+	| 'bcom-af'
+	| 'bcom-pa'
+	| 'bcom-iaf'
+	| 'bba-general'
+	| 'ba-policy'
+	| 'ba-english'
+	| 'ba-islamic';
 ```
 
 ### Form Validation
 
 #### Registration Validation
+
 ```typescript
 interface RegistrationValidation {
-  rrn: {
-    pattern: RegExp;         // /^[0-9]+$/
-    minLength: number;       // Minimum RRN length
-    maxLength: number;       // Maximum RRN length
-    required: true;
-  };
-  password: {
-    minLength: number;       // Minimum password length
-    requireSpecial: boolean; // Require special characters
-    requireNumber: boolean;  // Require numbers
-    requireUpper: boolean;   // Require uppercase letters
-  };
-  course: {
-    type: CourseType;       // Must be valid course type
-    required: true;
-  };
+	rrn: {
+		pattern: RegExp; // /^[0-9]+$/
+		minLength: number; // Minimum RRN length
+		maxLength: number; // Maximum RRN length
+		required: true;
+	};
+	password: {
+		minLength: number; // Minimum password length
+		requireSpecial: boolean; // Require special characters
+		requireNumber: boolean; // Require numbers
+		requireUpper: boolean; // Require uppercase letters
+	};
+	course: {
+		type: CourseType; // Must be valid course type
+		required: true;
+	};
 }
 ```
 
 #### Validation Functions
+
 ```typescript
 function validateRRN(rrn: string): boolean;
 function validatePassword(password: string): boolean;
@@ -795,19 +818,23 @@ function validateConfirmPassword(password: string, confirm: string): boolean;
 ### UI Components
 
 #### Form Fields
+
 1. **RRN Input**
+
    - Pattern validation
    - Real-time feedback
    - Error messaging
    - Format guidance
 
 2. **Course Selection**
+
    - Grouped by department
    - Searchable dropdown
    - Validation on select
    - Default placeholder
 
 3. **Password Fields**
+
    - Strength indicator
    - Match validation
    - Show/hide toggle
@@ -822,56 +849,56 @@ function validateConfirmPassword(password: string, confirm: string): boolean;
 ### Error Messages
 
 #### Validation Errors
+
 ```typescript
 type ValidationError =
-  | 'RRN_REQUIRED'
-  | 'RRN_INVALID_FORMAT'
-  | 'RRN_ALREADY_EXISTS'
-  | 'PASSWORD_TOO_SHORT'
-  | 'PASSWORD_TOO_WEAK'
-  | 'PASSWORDS_DO_NOT_MATCH'
-  | 'COURSE_REQUIRED'
-  | 'COURSE_INVALID';
+	| 'RRN_REQUIRED'
+	| 'RRN_INVALID_FORMAT'
+	| 'RRN_ALREADY_EXISTS'
+	| 'PASSWORD_TOO_SHORT'
+	| 'PASSWORD_TOO_WEAK'
+	| 'PASSWORDS_DO_NOT_MATCH'
+	| 'COURSE_REQUIRED'
+	| 'COURSE_INVALID';
 ```
 
 #### User-Friendly Messages
+
 ```typescript
 const errorMessages: Record<ValidationError, string> = {
-  RRN_REQUIRED: 'Registration number is required',
-  RRN_INVALID_FORMAT: 'Please enter a valid registration number',
-  RRN_ALREADY_EXISTS: 'This registration number is already registered',
-  PASSWORD_TOO_SHORT: 'Password must be at least 8 characters',
-  PASSWORD_TOO_WEAK: 'Password must include numbers and special characters',
-  PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
-  COURSE_REQUIRED: 'Please select your course',
-  COURSE_INVALID: 'Please select a valid course'
+	RRN_REQUIRED: 'Registration number is required',
+	RRN_INVALID_FORMAT: 'Please enter a valid registration number',
+	RRN_ALREADY_EXISTS: 'This registration number is already registered',
+	PASSWORD_TOO_SHORT: 'Password must be at least 8 characters',
+	PASSWORD_TOO_WEAK: 'Password must include numbers and special characters',
+	PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
+	COURSE_REQUIRED: 'Please select your course',
+	COURSE_INVALID: 'Please select a valid course'
 };
 ```
 
 ### Design System
 
 #### Form Styling
+
 ```css
 /* Input Base Styles */
 .form-input {
-  @apply w-full rounded-md border border-gray-700 
-         bg-gray-800 px-4 py-2.5 text-white 
-         placeholder-gray-500;
+	@apply w-full rounded-md border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500;
 }
 
 /* Focus States */
 .form-input:focus {
-  @apply border-indigo-500 ring-1 ring-indigo-500 
-         outline-none;
+	@apply border-indigo-500 ring-1 ring-indigo-500 outline-none;
 }
 
 /* Error States */
 .form-input.error {
-  @apply border-red-500 ring-1 ring-red-500;
+	@apply border-red-500 ring-1 ring-red-500;
 }
 
 /* Success States */
 .form-input.success {
-  @apply border-green-500 ring-1 ring-green-500;
+	@apply border-green-500 ring-1 ring-green-500;
 }
 ```

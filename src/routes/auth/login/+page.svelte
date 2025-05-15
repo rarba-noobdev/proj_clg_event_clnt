@@ -1,9 +1,3 @@
-<svelte:head>
-	<title>Login - Cresbee</title>
-	<meta name="description" content="Log in to access your events and dashboard." />
-	<meta name="robots" content="noindex, nofollow" />
-</svelte:head>
-
 <!--
   Login Page Component
   ------------------
@@ -51,11 +45,35 @@
   - Password reset
 -->
 <script lang="ts">
-  import type { PageData } from './$types.js';
-  
-  // ...existing code...
+	import type { PageProps } from '../$types.js';
+	let { form }: PageProps = $props();
+	import toast, { Toaster } from 'svelte-5-french-toast';
+	$effect(() => {
+		if (form) {
+			if (form.error) {
+				toast.error(form.error, {
+					duration: 5000,
+					position: 'top-center',
+					style: {
+						backgroundColor: '#1f2937',
+						color: '#fff',
+						borderRadius: '8px',
+						padding: '16px',
+						boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+					}
+				});
+			}
+		}
+	});
 </script>
 
+<svelte:head>
+	<title>Login - Cresbee</title>
+	<meta name="description" content="Log in to access your events and dashboard." />
+	<meta name="robots" content="noindex, nofollow" />
+</svelte:head>
+
+<!-- <Toaster></Toaster> -->
 <div class="flex min-h-screen items-center justify-center bg-gray-900 px-4 py-12 text-gray-100">
 	<div class="mx-auto w-full max-w-md">
 		<!-- Login Form Card -->
@@ -79,7 +97,7 @@
 					<h2 class="text-xl font-bold text-white">Login</h2>
 				</div>
 			</div>
-    
+
 			<form method="POST" class="space-y-5 p-6" aria-labelledby="login-heading">
 				<div class="space-y-2">
 					<label for="rrn-input" class="block text-sm font-medium text-gray-300">
@@ -152,7 +170,7 @@
 
 			<div class="border-t border-gray-700 px-6 py-4 text-center">
 				<p class="text-sm text-gray-400">
-					Don't have an account? <a href="/auth/register" class="text-indigo-400 hover:underline"
+					Don't have an account? <a href="/auth/register/" class="text-indigo-400 hover:underline"
 						>Register</a
 					>
 				</p>

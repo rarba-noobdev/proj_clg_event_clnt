@@ -3,38 +3,38 @@
  * -----------------
  * Server-side hooks for handling authentication, session management,
  * and request/response modifications.
- * 
+ *
  * Features:
  * - Supabase authentication integration
  * - Session validation and management
  * - Protected route handling
  * - Response header management
- * 
+ *
  * Hooks:
  * 1. Supabase Integration
  *    - Creates Supabase client
  *    - Handles authentication
  *    - Manages cookies
- * 
+ *
  * 2. Auth Guard
  *    - Protects routes
  *    - Validates sessions
  *    - Handles redirects
- * 
+ *
  * Usage:
  * This module is automatically used by SvelteKit for server-side
  * request handling and authentication.
- * 
+ *
  * Protected Routes:
  * - /explore/*
  * - /private/*
  * - /settings/*
- * 
+ *
  * Public Routes:
  * - /auth/*
  * - /
  * - /about
- * 
+ *
  * @module hooks.server
  */
 
@@ -50,21 +50,25 @@ const supabase: Handle = async ({ event, resolve }) => {
 	 *
 	 * The Supabase client gets the Auth token from the request cookies.
 	 */
-	event.locals.supabase = createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-		cookies: {
-			getAll: () => event.cookies.getAll(),
-			/**
-			 * SvelteKit's cookies API requires `path` to be explicitly set in
-			 * the cookie options. Setting `path` to `/` replicates previous/
-			 * standard behavior.
-			 */
-			setAll: (cookiesToSet) => {
-				cookiesToSet.forEach(({ name, value, options }) => {
-					event.cookies.set(name, value, { ...options, path: '/' });
-				});
+	event.locals.supabase = createServerClient<Database>(
+		PUBLIC_SUPABASE_URL,
+		PUBLIC_SUPABASE_ANON_KEY,
+		{
+			cookies: {
+				getAll: () => event.cookies.getAll(),
+				/**
+				 * SvelteKit's cookies API requires `path` to be explicitly set in
+				 * the cookie options. Setting `path` to `/` replicates previous/
+				 * standard behavior.
+				 */
+				setAll: (cookiesToSet) => {
+					cookiesToSet.forEach(({ name, value, options }) => {
+						event.cookies.set(name, value, { ...options, path: '/' });
+					});
+				}
 			}
 		}
-	});
+	);
 
 	/**
 	 * Unlike `supabase.auth.getSession()`, which returns the session _without_

@@ -1,55 +1,31 @@
 /**
  * Login Server Actions Module
  * ------------------------
- * Handles server-side authentication logic for user login.
- * Manages form validation, Supabase authentication, and error handling.
- * 
+ * Handles server-side authentication logic for user login with Supabase.
+ *
  * Features:
- * - Form validation
+ * - Basic form validation
  * - Supabase authentication
  * - Error handling
  * - Session management
- * - Security measures
- * 
+ *
  * Actions:
  * 1. Login
- *    - Validates RRN format
- *    - Checks credentials
- *    - Creates session
- *    - Handles errors
- * 
- * Form Processing:
- * - RRN validation
- * - Password validation
- * - CSRF protection
- * - Rate limiting
- * 
- * Error Handling:
- * - Invalid credentials
- * - Missing fields
- * - Server errors
- * - Network issues
- * 
- * Security:
- * - Input sanitization
- * - Rate limiting
- * - Session encryption
- * - Secure headers
- * 
- * @module auth/login/server
+ *    - Checks RRN and password presence
+ *    - Authenticates with Supabase
+ *    - Redirects on success
+ *
  */
 
-import { redirect, fail } from '@sveltejs/kit';
-import type { Actions } from '../$types.js';
-import { goto } from '$app/navigation';
- 
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions } from './$types.js';
+
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
-		// Ensure supabase is available
+		// Get Supabase client
 		const { supabase } = locals;
 		if (!supabase) {
-			console.error('Supabase client not initialized');
-			return fail(500, { error: 'Internal server error' });
+			return fail(500, { error: 'Server configuration error' });
 		}
 
 		// Parse form data
@@ -57,29 +33,26 @@ export const actions: Actions = {
 		const rrn = formData.get('rrn')?.toString();
 		const password = formData.get('password')?.toString();
 
-		// Validate inputs
+		// Check for required fields
 		if (!rrn || !password) {
-			return fail(400, { error: 'Registration number and password are required' });
+			return fail(400, { rrn: rrn || '', error: 'Please enter registration number and password' });
 		}
 
-		// Validate rrn format (basic example, adjust as needed)
-		if (!/^[0-9]+$/.test(rrn)) {
-			return fail(400, { error: 'Invalid registration number' });
-		}
-
-		// Construct email
+		// Construct email for Supabase
 		const email = `${rrn}@crescent.education`;
 
 		// Attempt login
-		const { error } = await supabase.auth.signInWithPassword({ email, password });
-
+		const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 		if (error) {
-			console.error('Login error:', error.message);
-			// Map Supabase errors to user-friendly messages
-			redirect(303, `/auth/error/${error.message}`);			
+			return fail(400, { rrn, error: 'Invalid registration number or password' });
 		}
-                                                
-		// Success: redirect to Home page
-		redirect(303, '/explore/events');
+
+		// Verify session
+		if (!data.session) {
+			return fail(500, { rrn, error: 'Unable to create session' });
+		}
+
+		// Redirect to dashboard
+		throw redirect(302, '/');
 	}
 };
