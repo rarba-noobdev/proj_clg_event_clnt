@@ -78,6 +78,7 @@
 
 	$effect(() => {
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+			console.log('Auth state changed:', newSession);
 			userState.updateState({
 				session: newSession,
 				supabase: supabase,

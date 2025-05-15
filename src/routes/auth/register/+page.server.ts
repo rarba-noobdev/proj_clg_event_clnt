@@ -121,7 +121,7 @@ export const actions: Actions = {
 			return fail(500, { error: userError.message });
 		}
 
-		// Redirect to login or dashboard after successful registration
+		// Redirect to Home after successful registration
 		redirect(303, '/');
 	}
 };

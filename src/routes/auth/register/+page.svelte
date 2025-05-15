@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	let { data, form } = $props();
+	let { data } = $props();
 	type Course = {
 		course_code: string;
 		course_name: string;
 		duration: number;
 		id: number;
 	};
-	// $inspect(form);
 	let courses: Course[] = $derived(data.courses ?? []);
 </script>
 
@@ -26,12 +24,7 @@
 				</div>
 			{/if}
 
-			<form
-				method="POST"
-				action="?/register"
-				use:enhance
-				class="grid grid-cols-1 gap-6 md:grid-cols-2"
-			>
+			<form method="POST" class="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<!-- Left Column -->
 				<div class="space-y-5">
 					<!-- First Name -->

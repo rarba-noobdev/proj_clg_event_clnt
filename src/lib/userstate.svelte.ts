@@ -58,7 +58,6 @@ export class UserState {
 	/** @private Supabase client instance */
 	private _supabase = $state<SupabaseClient | null>(null);
 	/** @private Cached events data */
-	private _events = $state<EventTable[] | []>([]);
 
 	/**
 	 * Creates a new UserState instance
