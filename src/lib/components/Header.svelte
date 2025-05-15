@@ -1,3 +1,39 @@
+<!--
+  Header Component
+  --------------
+  Main navigation header component with user authentication state,
+  navigation links, and responsive design.
+  
+  Features:
+  - User authentication status
+  - Dynamic navigation menu
+  - Mobile responsiveness
+  - Smooth transitions
+  - Profile management
+  
+  Usage:
+  ```svelte
+  <script>
+    import Header from '$lib/components/Header.svelte';
+  </script>
+  
+  <Header />
+  ```
+  
+  Props: None
+  
+  Events:
+  - logOut: Triggered when user logs out
+  
+  State:
+  - userState: Global user state
+  - user: Current user information
+  
+  Styling:
+  - Uses Tailwind for responsive design
+  - Custom animations for transitions
+  - Glassmorphism effects
+-->
 <script lang="ts">
 	import { getUserState } from '$lib/userstate.svelte.js';
 	let userState = $derived(getUserState());
@@ -77,7 +113,7 @@
 		<div class="flex items-center gap-2 md:gap-3">
 			{#if !user}
 				<a
-					href="/auth"
+					href="/auth/login"
 					class="flex items-center rounded-lg border border-indigo-500/30 bg-indigo-900/30 px-4 py-1.5 text-sm font-medium text-indigo-400 shadow-sm transition-all duration-200 hover:bg-indigo-900/50 hover:text-indigo-300 hover:shadow-indigo-500/20 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-950 focus:outline-none"
 				>
 					<svg

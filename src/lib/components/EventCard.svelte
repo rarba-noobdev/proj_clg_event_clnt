@@ -1,32 +1,54 @@
 <!--
-	EventCard.svelte
-	---------------
-	A reusable component for displaying event information in a card format.
+	Event Card Component
+	------------------
+	Displays event information in a card format with real-time updates
+	and interactive elements.
 	
 	Features:
-	- Displays event name, description, date, time, and location
-	- Shows price and registration status
-	- Indicates food and OD availability with badges
-	- Visual progress bar for booking status
-	- Dynamic color theming based on event's color property
-	- Sold out status indicator
-	- Hover effects with accent glow
+	- Dynamic content display
+	- Real-time availability updates
+	- Interactive registration
+	- Responsive design
+	- Accessibility support
 	
 	Props:
-	- e: EventTable - Event data object containing all necessary information
-	  - name: string - Event name
-	  - description: string - Event description
-	  - start_date: string - Start date
-	  - end_date: string - End date
-	  - time: string - Event time
-	  - location: string - Event location
-	  - price: number - Event price
-	  - max_slots: number - Maximum available slots
-	  - booked_slots: number - Currently booked slots
-	  - food_provided: boolean - Whether food is provided
-	  - od_provided: boolean - Whether OD is available
-	  - is_sold_out: boolean - Whether the event is sold out
-	  - color: string - Theme color for the card
+	```typescript
+	export let event: EventTable;
+	```
+	
+	Usage:
+	```svelte
+	<script>
+	  import EventCard from '$lib/components/EventCard.svelte';
+	</script>
+	
+	<EventCard {event} />
+	```
+	
+	Display Elements:
+	1. Event Information
+	   - Name and description
+	   - Date and time
+	   - Location
+	   - Price
+	
+	2. Status Indicators
+	   - Availability
+	   - Food provision
+	   - OD status
+	   - Registration progress
+	
+	3. Interactive Elements
+	   - Register button
+	   - Share options
+	   - More info link
+	
+	States:
+	- Loading
+	- Error
+	- Available
+	- Almost Full
+	- Sold Out
 -->
 <script lang="ts">
 	import type { EventTable } from '$lib/userstate.svelte.js';

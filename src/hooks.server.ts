@@ -1,7 +1,47 @@
+/**
+ * Server Hooks Module
+ * -----------------
+ * Server-side hooks for handling authentication, session management,
+ * and request/response modifications.
+ * 
+ * Features:
+ * - Supabase authentication integration
+ * - Session validation and management
+ * - Protected route handling
+ * - Response header management
+ * 
+ * Hooks:
+ * 1. Supabase Integration
+ *    - Creates Supabase client
+ *    - Handles authentication
+ *    - Manages cookies
+ * 
+ * 2. Auth Guard
+ *    - Protects routes
+ *    - Validates sessions
+ *    - Handles redirects
+ * 
+ * Usage:
+ * This module is automatically used by SvelteKit for server-side
+ * request handling and authentication.
+ * 
+ * Protected Routes:
+ * - /explore/*
+ * - /private/*
+ * - /settings/*
+ * 
+ * Public Routes:
+ * - /auth/*
+ * - /
+ * - /about
+ * 
+ * @module hooks.server
+ */
+
 import { createServerClient } from '@supabase/ssr';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-
+import type { Database } from '$lib/types/database.types.js';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
 const supabase: Handle = async ({ event, resolve }) => {
@@ -10,7 +50,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 	 *
 	 * The Supabase client gets the Auth token from the request cookies.
 	 */
-	event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+	event.locals.supabase = createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		cookies: {
 			getAll: () => event.cookies.getAll(),
 			/**

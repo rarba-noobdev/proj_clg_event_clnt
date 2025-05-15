@@ -29,7 +29,7 @@
 			<p class="mb-6 text-sm text-gray-400">'Something went wrong. Please try again later.'</p>
 
 			<a
-				href="./../../"
+				href="/"
 				class="w-full rounded-lg bg-indigo-600 px-4 py-3 font-medium text-white shadow-md shadow-indigo-500/20 transition-colors duration-200 hover:bg-indigo-700 hover:shadow-indigo-500/30 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none"
 			>
 				Back To Home

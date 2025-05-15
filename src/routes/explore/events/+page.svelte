@@ -30,9 +30,9 @@
 	import type { EventTable } from '$lib/userstate.svelte.js';
 	import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-	// Get props (data passed from +page.ts)
+	// Get props (data passed from +layout.ts)
 	let { data }: PageProps = $props();
-	let { supabase, eventsPromise } = data;
+	let { supabase, eventsPromise  } = $derived(data);
 
 	// State variables to manage the page
 	let events: EventTable[] = $state([]); // List of events
@@ -53,8 +53,8 @@
 			});
 
 		// Set up real-time updates with Supabase
-		const channel = supabase.channel('events-realtime');
-		channel
+		const channe = supabase.channel('events-realtime');
+		channe
 			.on(
 				'postgres_changes',
 				{ event: '*', schema: 'public', table: 'events' },
@@ -78,7 +78,8 @@
 
 		// Clean up the subscription when the component is destroyed
 		return () => {
-			supabase.removeChannel(channel);
+			console.log("Clean UP fn");
+			supabase.removeChannel(channe);
 		};
 	});
 

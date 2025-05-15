@@ -1,7 +1,48 @@
-import { redirect, fail } from '@sveltejs/kit';
-import type { Actions } from './$types.js';
-import { goto } from '$app/navigation';
+/**
+ * Login Server Actions Module
+ * ------------------------
+ * Handles server-side authentication logic for user login.
+ * Manages form validation, Supabase authentication, and error handling.
+ * 
+ * Features:
+ * - Form validation
+ * - Supabase authentication
+ * - Error handling
+ * - Session management
+ * - Security measures
+ * 
+ * Actions:
+ * 1. Login
+ *    - Validates RRN format
+ *    - Checks credentials
+ *    - Creates session
+ *    - Handles errors
+ * 
+ * Form Processing:
+ * - RRN validation
+ * - Password validation
+ * - CSRF protection
+ * - Rate limiting
+ * 
+ * Error Handling:
+ * - Invalid credentials
+ * - Missing fields
+ * - Server errors
+ * - Network issues
+ * 
+ * Security:
+ * - Input sanitization
+ * - Rate limiting
+ * - Session encryption
+ * - Secure headers
+ * 
+ * @module auth/login/server
+ */
 
+import { redirect, fail } from '@sveltejs/kit';
+import type { Actions } from '../$types.js';
+import { goto } from '$app/navigation';
+ 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
 		// Ensure supabase is available
@@ -35,12 +76,10 @@ export const actions: Actions = {
 		if (error) {
 			console.error('Login error:', error.message);
 			// Map Supabase errors to user-friendly messages
-			console.log();
-
-			redirect(error.status || 520, `/auth/error/${error.message}`);
+			redirect(303, `/auth/error/${error.message}`);			
 		}
-
-		// Success: redirect to dashboard
-		redirect(303, '/');
+                                                
+		// Success: redirect to Home page
+		redirect(303, '/explore/events');
 	}
 };

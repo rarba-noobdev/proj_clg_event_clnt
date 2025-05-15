@@ -24,14 +24,52 @@
 	- Persistent header across all routes
 	- Global CSS styles
 -->
+<!--
+  Root Layout Component
+  -------------------
+  Primary layout component that wraps all routes in the application.
+  Manages global state, navigation, and authentication.
+  
+  Features:
+  - Global navigation header
+  - Authentication state management
+  - Navigation progress indicator
+  - User session synchronization
+  - Global styles integration
+  
+  Usage:
+  This component is automatically used by SvelteKit as the root layout.
+  All routes are rendered within this component.
+  
+  State Management:
+  - Handles global user state
+  - Manages Supabase session
+  - Tracks navigation state
+  - Real-time auth updates
+  
+  Props:
+  - data: Server-side loaded data
+  - children: Child routes to render
+  
+  Effects:
+  - Syncs auth state changes
+  - Updates user context
+  - Manages navigation indicator
+  
+  Navigation:
+  - Progress bar during route changes
+  - Smooth transitions between pages
+  - Persistent header across routes
+-->
 <script lang="ts">
 	import { navigating } from '$app/state';
 	import { invalidate } from '$app/navigation';
-	let { data, children } = $props();
-	let { session, supabase } = $derived(data);
+	import { getUserState, setUserState } from '$lib/userstate.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import '../app.css';
-	import { setUserState } from '$lib/userstate.svelte';
+
+	let { data, children } = $props();
+	let { session, supabase } = $derived(data);
 	const userState = setUserState({
 		session: data.session,
 		supabase: data.supabase,

@@ -4,6 +4,58 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
+<!--
+  Login Page Component
+  ------------------
+  Handles user authentication through a login form with
+  real-time validation and error handling.
+  
+  Features:
+  - RRN input validation
+  - Password field
+  - Form submission
+  - Error display
+  - Loading states
+  
+  Form Fields:
+  1. RRN (Registration Number)
+     - Required field
+     - Numeric validation
+     - Format checking
+  
+  2. Password
+     - Required field
+     - Secure input
+     - Show/hide toggle
+  
+  States:
+  - Loading
+  - Error
+  - Success
+  - Initial
+  
+  Validation:
+  - Client-side validation
+  - Real-time feedback
+  - Server-side validation
+  
+  Error Handling:
+  - Invalid credentials
+  - Network errors
+  - Server errors
+  - Validation errors
+  
+  Navigation:
+  - Redirect on success
+  - Registration link
+  - Password reset
+-->
+<script lang="ts">
+  import type { PageData } from './$types.js';
+  
+  // ...existing code...
+</script>
+
 <div class="flex min-h-screen items-center justify-center bg-gray-900 px-4 py-12 text-gray-100">
 	<div class="mx-auto w-full max-w-md">
 		<!-- Login Form Card -->
@@ -27,7 +79,7 @@
 					<h2 class="text-xl font-bold text-white">Login</h2>
 				</div>
 			</div>
-
+    
 			<form method="POST" class="space-y-5 p-6" aria-labelledby="login-heading">
 				<div class="space-y-2">
 					<label for="rrn-input" class="block text-sm font-medium text-gray-300">
@@ -100,7 +152,7 @@
 
 			<div class="border-t border-gray-700 px-6 py-4 text-center">
 				<p class="text-sm text-gray-400">
-					Don't have an account? <a href="/register" class="text-indigo-400 hover:underline"
+					Don't have an account? <a href="/auth/register" class="text-indigo-400 hover:underline"
 						>Register</a
 					>
 				</p>
