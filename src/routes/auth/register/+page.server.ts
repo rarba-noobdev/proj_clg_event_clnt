@@ -2,19 +2,20 @@ import type { Actions } from './$types.js';
 import { fail, redirect } from '@sveltejs/kit';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
- 	interface FormDataFields {	 course_code: string
-          created_at?: string | null
-          email: string
-          first_name: string
-          id?: string
-          is_admin?: boolean | null
-          last_name: string
-          phone?: string | null
-          rrn: string
-          updated_at?: string | null
-		  password: string
-		  passwordConfirm: string
-	}
+interface FormDataFields {
+	course_code: string;
+	created_at?: string | null;
+	email: string;
+	first_name: string;
+	id?: string;
+	is_admin?: boolean | null;
+	last_name: string;
+	phone?: string | null;
+	rrn: string;
+	updated_at?: string | null;
+	password: string;
+	passwordConfirm: string;
+}
 interface Locals {
 	supabase: SupabaseClient;
 }
@@ -67,7 +68,15 @@ export const actions: Actions = {
 		};
 
 		// Validate required fields
-		if (!email || !password || !passwordConfirm || !rrn || !first_name || !last_name || !course_code) {
+		if (
+			!email ||
+			!password ||
+			!passwordConfirm ||
+			!rrn ||
+			!first_name ||
+			!last_name ||
+			!course_code
+		) {
 			return fail(400, { error: 'All fields except phone are required' });
 		}
 
@@ -84,7 +93,7 @@ export const actions: Actions = {
 		// Register user with Supabase
 		const { error: authError, data } = await supabase.auth.signUp({
 			email,
-			password,
+			password
 		});
 
 		if (authError) {
@@ -103,7 +112,7 @@ export const actions: Actions = {
 			last_name,
 			phone,
 			course_code,
-			is_admin: false,
+			is_admin: false
 		});
 
 		if (userError) {
