@@ -7,7 +7,7 @@
 		duration: number;
 		id: number;
 	};
-	$inspect(form);
+	// $inspect(form);
 	let courses: Course[] = $derived(data.courses ?? []);
 </script>
 

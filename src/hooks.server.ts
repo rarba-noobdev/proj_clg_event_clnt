@@ -1,4 +1,5 @@
 /**
+ * npx supabase gen types typescript --project-id "lkjmoypfaoeciiicxsbw" --schema public > database.types.ts
  * Server Hooks Module
  * -----------------
  * Server-side hooks for handling authentication, session management,
