@@ -192,5 +192,3 @@
 		box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5); /* Indigo-500 */
 	}
 </style>
-
-
