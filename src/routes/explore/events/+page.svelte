@@ -135,7 +135,6 @@ Implements real-time updates and filtering capabilities for event discovery.
 			<div class="col-span-full py-12 text-center">
 				<p class="text-lg text-red-400">{error.message || 'Failed to load events'}</p>
 				<button
-					class="mt-4 rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
 					onclick={() =>
 						(eventsPromise = Promise.resolve(
 							supabase
