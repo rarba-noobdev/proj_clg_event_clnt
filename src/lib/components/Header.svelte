@@ -54,8 +54,7 @@
 	<h1 class="relative text-xl font-bold tracking-tight md:text-2xl">
 		<a
 			href="/"
-			class="flex items-center gap-2 transition-all duration-200 hover:text-indigo-400 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-950 focus:outline-none"
-		>
+ 		>
 			<span class="relative text-2xl text-indigo-400 md:text-3xl">📚</span>
 			<span
 				class="hidden bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text font-extrabold text-transparent md:inline"
