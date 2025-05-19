@@ -119,8 +119,7 @@ Implements real-time updates and filtering capabilities for event discovery.
 					{#each events as event (event.id ?? `event-${events.indexOf(event)}`)}
 						<a
 							href={`/explore/events/${event.id}`}
-							class="group rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-							aria-label={`View ${event.name || 'event'}`}
+ 							aria-label={`View ${event.name || 'event'}`}
 						>
 							<EventCard e={event} />
 						</a>
