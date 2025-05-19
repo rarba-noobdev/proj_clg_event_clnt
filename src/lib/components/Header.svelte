@@ -52,9 +52,7 @@
 	></div>
 
 	<h1 class="relative text-xl font-bold tracking-tight md:text-2xl">
-		<a
-			href="/"
- 		>
+		<a href="/">
 			<span class="relative text-2xl text-indigo-400 md:text-3xl">📚</span>
 			<span
 				class="hidden bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text font-extrabold text-transparent md:inline"

@@ -1,3 +1,64 @@
+<!--
+@component RegisterPage
+@description User registration component that handles new user sign-ups.
+Provides a multi-step registration form with course selection and validation.
+
+@props
+- data.courses: Course[] - Available courses from the server
+- data.departments: string[] - List of available departments
+
+@features
+- Multi-step registration process
+- Course selection with search and filtering
+- Real-time form validation
+- Department selection
+- Password strength validation
+- Automatic RRN generation
+- Form state persistence
+- Error handling and validation feedback
+
+@formFields
+- fullName: string
+- email: string
+- department: string
+- course: Course
+- password: string
+- confirmPassword: string
+
+@types
+```ts
+type Course = {
+    course_code: string;
+    course_name: string;
+    duration: number;
+    id: number;
+};
+```
+
+@validation
+- Email format validation
+- Password strength requirements
+- Course selection validation
+- Department validation
+- Form completeness check
+
+@dependencies
+- userstate ($lib/userstate.svelte.ts)
+- +page.server.ts (server-side logic)
+- database.types.ts (type definitions)
+
+@events
+- onSubmit: Handles form submission
+- onCourseSelect: Handles course selection
+- onDepartmentChange: Handles department changes
+
+@accessibility
+- ARIA labels for form controls
+- Error announcements
+- Keyboard navigation support
+- Focus management
+-->
+
 <script lang="ts">
 	let { data } = $props();
 	type Course = {

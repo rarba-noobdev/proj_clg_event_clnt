@@ -1,14 +1,51 @@
 <!--
-  Login Page Component
-  ------------------
-  Handles user authentication through a login form with
-  real-time validation and error handling.
-  
-  Features:
-  - RRN input validation
-  - Password field
-  - Form submission
-  - Error display
+@component LoginPage
+@description Authentication component that provides a secure login interface
+for users. Implements RRN (Registration Reference Number) based authentication
+with real-time validation and error handling.
+
+@features
+- Secure RRN (Registration Reference Number) input with validation
+- Password field with show/hide functionality
+- Real-time form validation and error messages
+- CSRF protection via form actions
+- Responsive design for mobile and desktop
+- Accessibility-compliant form controls
+- Error state handling and user feedback
+- Automatic redirect on successful login
+
+@formFields
+- rrn: Registration Reference Number
+- password: User's password
+- csrfToken: Hidden CSRF protection token
+
+@serverActions
+- default: Handles form submission and authentication
+- logout: Handles user logout requests
+
+@errorHandling
+- Displays validation errors in real-time
+- Shows server-side error messages
+- Handles network and authentication failures
+- Provides clear user feedback
+
+@security
+- CSRF protection
+- Rate limiting
+- Password field masking
+- Secure form submission
+
+@dependencies
+- userstate ($lib/userstate.svelte.ts)
+- $app/forms (form actions)
+- +page.server.ts (server-side logic)
+
+@example
+Accessed via /auth/login route:
+```ts
+// Usage in navigation
+goto('/auth/login');
+```
   - Loading states
   
   Form Fields:
@@ -45,7 +82,7 @@
   - Password reset
 -->
 <script lang="ts">
-	import type { PageProps } from '../$types.js';
+	import type { PageProps } from './$types.js';
 	let { form }: PageProps = $props();
 	import toast, { Toaster } from 'svelte-5-french-toast';
 	$effect(() => {

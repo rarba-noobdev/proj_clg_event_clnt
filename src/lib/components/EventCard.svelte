@@ -1,14 +1,63 @@
 <!--
-	Event Card Component
-	------------------
-	Displays event information in a card format with real-time updates
-	and interactive elements.
-	
-	Features:
-	- Dynamic content display
-	- Real-time availability updates
-	- Interactive registration
-	- Responsive design
+@component EventCard
+@description A reusable card component that displays event information in an
+interactive and visually appealing format. Supports real-time updates and
+provides user interaction features.
+
+@props
+- event: EventTable - The event data to display
+- featured?: boolean - Whether to show the card in a featured style
+- compact?: boolean - Whether to show a compact version of the card
+
+@features
+- Dynamic content rendering
+- Real-time availability updates
+- Interactive registration button
+- Responsive layout adaptation
+- Loading skeleton state
+- Error state handling
+- Customizable display modes
+- Accessibility support
+
+@slots
+- header: Custom header content
+- footer: Custom footer content
+- action: Custom action button
+
+@events
+- on:register: Event registration click
+- on:click: Card click
+- on:favorite: Favorite toggle
+
+@styling
+- Tailwind CSS classes
+- Responsive design breakpoints
+- Theme customization
+- Animation states
+
+@accessibility
+- ARIA labels
+- Focus management
+- Color contrast compliance
+- Screen reader optimization
+
+@usage
+```svelte
+<EventCard
+  event={eventData}
+  featured={true}
+  on:register={handleRegister}
+/>
+```
+
+@dependencies
+- database.types.ts (EventTable type)
+- userstate.svelte.ts (authentication state)
+
+@performance
+- Optimized re-renders
+- Lazy loaded images
+- Memoized computations
 	- Accessibility support
 	
 	Props:

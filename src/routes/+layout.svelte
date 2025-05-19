@@ -1,14 +1,45 @@
 <!--
-	+layout.svelte
-	-------------
-	Root layout component that wraps all pages in the application.
-	
-	Features:
-	- Global navigation header
-	- Authentication state management
-	- Navigation progress indicator
-	- User session synchronization with Supabase
-	- Global styles integration
+@component RootLayout
+@description Root layout component that provides the application shell and global functionality.
+This component serves as the main wrapper for all pages in the application,
+handling authentication, navigation, and global UI elements.
+
+@features
+- Global navigation with responsive header
+- Authentication state management and session persistence
+- Real-time user session synchronization with Supabase
+- Navigation progress indicators and loading states
+- Global styles and theme integration
+- Error boundary and fallback UI
+- Automatic route guarding for protected pages
+
+@dependencies
+- Header ($lib/components/Header.svelte)
+- userstate ($lib/userstate.svelte.ts)
+- app.css (global styles)
+
+@layout
+The component uses a flex layout with:
+- Fixed header at the top
+- Main content area that grows to fill available space
+- Optional footer (when present)
+
+@context
+Provides:
+- User authentication state
+- Supabase client instance
+- Theme preferences
+
+@example
+Used automatically by SvelteKit as the root layout:
+```ts
+// src/routes/+layout.ts
+export const load = () => {
+  return {
+    // Layout data
+  };
+};
+```
 	
 	Props:
 	- data: Server-side loaded data containing session and Supabase client
