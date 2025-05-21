@@ -117,10 +117,7 @@ Implements real-time updates and filtering capabilities for event discovery.
 					class="custom-scrollbar grid max-h-[calc(100vh-12rem)] grid-cols-1 gap-6 overflow-y-auto pr-2 sm:gap-8 sm:pr-3 md:grid-cols-2 lg:grid-cols-3"
 				>
 					{#each events as event (event.id ?? `event-${events.indexOf(event)}`)}
-						<a
-							href={`/explore/events/${event.id}`}
- 							aria-label={`View ${event.name || 'event'}`}
-						>
+						<a href={`/explore/events/${event.id}`} aria-label={`View ${event.name || 'event'}`}>
 							<EventCard e={event} />
 						</a>
 					{/each}
